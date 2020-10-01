@@ -23,12 +23,8 @@ def isRectangleACollidingWithRectangleB(Center_A, theta_A, Vertices_A, Center_B,
     dAB = math.sqrt( (Center_A[0] - Center_B[0])**2 + (Center_A[1] - Center_B[1])**2 )
     if dAB > 2*R_BoundingCircle:
         return False
-
-    #2) Check if boxes are at the same position
-    if np.all(Center_A == Center_B):
-        return True
     
-    #3) Separating axis test
+    #2) Separating axis test
     #Rectangle A
     si_Minus = Vertices_A[3] - Vertices_A[0] 
     for i in range(len(Vertices_A)):
