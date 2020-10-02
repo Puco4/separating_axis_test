@@ -18,7 +18,7 @@ def calculateVerticesRectangle(Center, theta, l, w):
           Center + rotation(-w, l, theta_R) ] )
     return Vertices
 
-def isRectangleACollidingWithRectangleB(Center_A, theta_A, Vertices_A, Center_B, theta_B, Vertices_B, R_BoundingCircle, l, w):       
+def isRectangleACollidingWithRectangleB(Center_A, Vertices_A, Center_B, Vertices_B, R_BoundingCircle, l, w):       
     #1) Bounding circle check
     dAB = math.sqrt( (Center_A[0] - Center_B[0])**2 + (Center_A[1] - Center_B[1])**2 )
     if dAB > 2*R_BoundingCircle:
@@ -63,12 +63,13 @@ def isRectangleACollidingWithRectangleB(Center_A, theta_A, Vertices_A, Center_B,
 
     return True #There is no separating axis
 
-
 #MAIN
+#Parameters
 rd.seed(1)
 w = 5
 l = 10
 
+#---
 R_BoundingCircle = math.sqrt(w**2 + l**2)
 start_time = time.time()
 
@@ -77,18 +78,17 @@ for k in range(5):
     Center_A = np.array([rd.uniform(-15, 15), rd.uniform(-15, 15)])
     theta_A = 360*rd.random()
     Vertices_A = calculateVerticesRectangle(Center_A, theta_A, l, w)
-
+    
     Center_B = np.array([rd.uniform(-15, 15), rd.uniform(-15, 15)])  
     theta_B = 360*rd.random()
     Vertices_B = calculateVerticesRectangle(Center_B, theta_B, l, w)
+    
+    isColliding = isRectangleACollidingWithRectangleB(Center_A, Vertices_A, Center_B, Vertices_B, R_BoundingCircle, l, w)    
 
-    isColliding = isRectangleACollidingWithRectangleB(Center_A, theta_A, Vertices_A, Center_B, theta_B, Vertices_B, R_BoundingCircle, l, w)       
-
-    #Figure
+    #Figures
     plt.figure(figsize=(5, 5))
     plt.xlim(-50, 50)
     plt.ylim(-50, 50)
-    # Get the current reference
     ax = plt.gca()
 
     plt.plot(Vertices_A[0][0], Vertices_A[0][1], 'bo')
@@ -97,8 +97,7 @@ for k in range(5):
 
     plt.plot(Vertices_B[0][0], Vertices_B[0][1], 'ro')
     draw_rect = Rectangle( Vertices_B[2], 2*w, 2*l, theta_B, linewidth=1,edgecolor='r',facecolor='none')
-    ax.add_patch(draw_rect)
-
+    ax.add_patch(draw_rect)   
     plt.title("Colliding:%r" %isColliding)
 
 print("Time: %s s" % (time.time() - start_time))
